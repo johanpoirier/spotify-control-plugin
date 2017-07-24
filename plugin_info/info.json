@@ -1,12 +1,9 @@
 {
   "id": "spotifyControl",
-  "name": "Spotify controller",
+  "name": "Spotify Control",
   "description": "Spotify devices controller",
   "licence": "MIT",
   "author": "Johan Poirier",
   "require": "3.0",
-  "category": "multimedia",
-  "hasDependency": true,
-  "hasOwnDeamon": false,
-  "maxDependancyInstallTime": 60
+  "category": "multimedia"
 }
