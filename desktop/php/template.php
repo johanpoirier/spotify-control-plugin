@@ -120,5 +120,5 @@ foreach (object::all() as $object) {
 </div>
 </div>
 
-<?php include_file('desktop', 'spotify', 'js', 'spotify');?>
+<?php include_file('desktop', 'spotifyControl', 'js', 'spotifyControl');?>
 <?php include_file('core', 'plugin.template', 'js');?>
