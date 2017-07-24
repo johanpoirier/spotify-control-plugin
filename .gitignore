@@ -9,3 +9,4 @@ Thumbs.db
 *.php~
 
 .idea
+vendor

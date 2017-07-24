@@ -5,8 +5,8 @@
   "licence": "MIT",
   "author": "Johan Poirier",
   "require": "3.0",
-  "category": "programming",
-  "hasDependency": false,
+  "category": "multimedia",
+  "hasDependency": true,
   "hasOwnDeamon": false,
-  "maxDependancyInstallTime": 0
+  "maxDependancyInstallTime": 60
 }
