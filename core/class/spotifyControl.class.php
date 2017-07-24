@@ -17,9 +17,9 @@
  */
 
 /* * ***************************Includes********************************* */
-require_once dirname(__FILE__) . '/../../../../core/php/core.inc.php';
+require_once __DIR__ . '/../../../../core/php/core.inc.php';
 
-class template extends eqLogic {
+class spotifyControl extends eqLogic {
     /*     * *************************Attributs****************************** */
 
 
@@ -94,7 +94,7 @@ class template extends eqLogic {
     /*     * **********************Getteur Setteur*************************** */
 }
 
-class templateCmd extends cmd {
+class spotifyControlCmd extends cmd {
     /*     * *************************Attributs****************************** */
 
 
