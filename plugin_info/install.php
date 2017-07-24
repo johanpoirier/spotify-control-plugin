@@ -17,16 +17,3 @@
  */
 
 require_once __DIR__ . '/../../../core/php/core.inc.php';
-
-function template_install() {
-    
-}
-
-function template_update() {
-    
-}
-
-
-function template_remove() {
-    
-}
