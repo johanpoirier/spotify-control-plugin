@@ -21,102 +21,111 @@ require_once __DIR__ . '/../../../../core/php/core.inc.php';
 require_once __DIR__ . '/../../vendor/autoload.php';
 
 
-class spotifyControl extends eqLogic {
-    /*     * *************************Attributs****************************** */
+class spotifyControl extends eqLogic
+{
+  /*     * *************************Attributs****************************** */
 
 
+  /*     * ***********************Methode static*************************** */
 
-    /*     * ***********************Methode static*************************** */
+  /*
+   * Fonction exécutée automatiquement toutes les minutes par Jeedom
+    public static function cron() {
 
-    /*
-     * Fonction exécutée automatiquement toutes les minutes par Jeedom
-      public static function cron() {
-
-      }
-     */
-
-
-    /*
-     * Fonction exécutée automatiquement toutes les heures par Jeedom
-      public static function cronHourly() {
-
-      }
-     */
-
-    /*
-     * Fonction exécutée automatiquement tous les jours par Jeedom
-      public static function cronDayly() {
-
-      }
-     */
-
-
-
-    /*     * *********************Méthodes d'instance************************* */
-
-    public function preInsert() {
-        
     }
+   */
 
-    public function postInsert() {
-        
+
+  /*
+   * Fonction exécutée automatiquement toutes les heures par Jeedom
+    public static function cronHourly() {
+
     }
+   */
 
-    public function preSave() {
-        
+  /*
+   * Fonction exécutée automatiquement tous les jours par Jeedom
+    public static function cronDayly() {
+
     }
+   */
 
-    public function postSave() {
-        
-    }
 
-    public function preUpdate() {
-        
-    }
+  /*     * *********************Méthodes d'instance************************* */
 
-    public function postUpdate() {
-        
-    }
+  public function preInsert()
+  {
 
-    public function preRemove() {
-        
-    }
+  }
 
-    public function postRemove() {
-        
-    }
+  public function postInsert()
+  {
 
-    /*
-     * Non obligatoire mais permet de modifier l'affichage du widget si vous en avez besoin
-      public function toHtml($_version = 'dashboard') {
+  }
 
-      }
-     */
+  public function preSave()
+  {
 
-    /*     * **********************Getteur Setteur*************************** */
+  }
+
+  public function postSave()
+  {
+
+  }
+
+  public function preUpdate()
+  {
+
+  }
+
+  public function postUpdate()
+  {
+
+  }
+
+  public function preRemove()
+  {
+
+  }
+
+  public function postRemove()
+  {
+
+  }
+
+  public function toHtml($_version = 'dashboard')
+  {
+    $replace = $this->preToHtml($_version);
+    $version = jeedom::versionAlias($_version);
+    return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $version, 'main', 'spotifyControl')));
+  }
+
+  /*     * **********************Getteur Setteur*************************** */
 }
 
-class spotifyControlCmd extends cmd {
-    /*     * *************************Attributs****************************** */
+class spotifyControlCmd extends cmd
+{
+  /*     * *************************Attributs****************************** */
 
 
-    /*     * ***********************Methode static*************************** */
+  /*     * ***********************Methode static*************************** */
 
 
-    /*     * *********************Methode d'instance************************* */
+  /*     * *********************Methode d'instance************************* */
 
-    /*
-     * Non obligatoire permet de demander de ne pas supprimer les commandes même si elles ne sont pas dans la nouvelle configuration de l'équipement envoyé en JS
-      public function dontRemoveCmd() {
-      return true;
-      }
-     */
-
-    public function execute($_options = array()) {
-        
+  /*
+   * Non obligatoire permet de demander de ne pas supprimer les commandes même si elles ne sont pas dans la nouvelle configuration de l'équipement envoyé en JS
+    public function dontRemoveCmd() {
+    return true;
     }
+   */
 
-    /*     * **********************Getteur Setteur*************************** */
+  public function execute($_options = array())
+  {
+
+  }
+
+  /*     * **********************Getteur Setteur*************************** */
 }
 
 ?>
