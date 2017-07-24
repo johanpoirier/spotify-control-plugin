@@ -25,16 +25,20 @@ if (!isConnect()) {
 <form class="form-horizontal">
     <fieldset>
         <div class="form-group">
-            <label class="col-lg-4 control-label">{{Client ID}}</label>
-            <div class="col-lg-2">
+            <label class="col-lg-3 control-label">{{Client ID}}</label>
+            <div class="col-lg-4">
                 <input class="configKey form-control" data-l1key="clientID" />
             </div>
-            <label class="col-lg-4 control-label">{{Client Secret}}</label>
-            <div class="col-lg-2">
+        </div>
+        <div class="form-group">
+            <label class="col-lg-3 control-label">{{Client Secret}}</label>
+            <div class="col-lg-4">
                 <input class="configKey form-control" data-l1key="clientSecret" />
             </div>
-            <label class="col-lg-4 control-label">{{Redirect URI}}</label>
-            <div class="col-lg-2">
+        </div>
+        <div class="form-group">
+            <label class="col-lg-3 control-label">{{Redirect URI}}</label>
+            <div class="col-lg-4">
                 <input class="configKey form-control" data-l1key="redirectUri" />
             </div>
         </div>
