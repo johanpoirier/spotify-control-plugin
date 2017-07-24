@@ -97,6 +97,12 @@ class spotifyControl extends eqLogic
   {
     $replace = $this->preToHtml($_version);
     $version = jeedom::versionAlias($_version);
+
+    $accessToken = $this->getConfiguration('accessToken', null);
+    if ($accessToken === null) {
+      return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $version, 'login', 'spotifyControl')));
+    }
+
     return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $version, 'main', 'spotifyControl')));
   }
 
