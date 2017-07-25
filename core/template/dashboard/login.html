@@ -3,8 +3,8 @@
     <button class="btn btn-default action" id="spotifyControl-login-btn">Login</button>
 </div>
 <script type="text/javascript">
-    const redirect_uri = '';
-    const client_id = '';
+    const client_id = '#client_id#';
+    const redirect_uri = '#redirect_uri#';
 
     const generateRandomString = function(length) {
         let text = '';
@@ -20,7 +20,7 @@
         console.log('Login to Spotify');
 
         const state = generateRandomString(16);
-        res.cookie(stateKey, state);
+        //res.cookie(stateKey, state);
 
         // your application requests authorization
         const data = {
@@ -30,6 +30,8 @@
             redirect_uri: redirect_uri,
             state: state
         };
-        window.open('https://accounts.spotify.com/authorize?' + Object.keys(data).map(key => `${key}=${encodeURIComponent(data[key])}`).join('&'));
+
+        const strWindowFeatures = "menubar=no,location=no,resizable=no,scrollbars=yes,status=no";
+        window.open('https://accounts.spotify.com/authorize?' + Object.keys(data).map(key => `${key}=${encodeURIComponent(data[key])}`).join('&'), strWindowFeatures);
     });
 </script>

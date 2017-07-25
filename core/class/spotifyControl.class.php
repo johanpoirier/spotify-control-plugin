@@ -100,6 +100,8 @@ class spotifyControl extends eqLogic
 
     $accessToken = $this->getConfiguration('accessToken', null);
     if ($accessToken === null) {
+      $replace['#client_id#'] = $this->getConfiguration('clientId', '');
+      $replace['#redirect_uri#'] = $this->getConfiguration('redirectUri', '');
       return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $version, 'login', 'spotifyControl')));
     }
 
