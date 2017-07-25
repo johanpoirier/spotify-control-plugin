@@ -114,17 +114,17 @@ class spotifyControl extends eqLogic
   public function toHtml($_version = 'dashboard')
   {
     $replace = [];
-    $version = jeedom::versionAlias($_version);
+    $jeedomVersion = jeedom::versionAlias($_version);
 
-    $accessToken = $this->getConfiguration('accessToken', null);
-    if ($accessToken === null) {
-      $this->loginHtml($_version);
+    $tokenExpiration = $this->getConfiguration('tokenExpiration', null);
+    if ($tokenExpiration === null) {
+      return $this->loginHtml($_version, $jeedomVersion);
     }
 
     $replace['#devices#'] = json_encode($this->getSpotifyApi()->getMyDevices());
     $replace['#expiration#'] = $this->getConfiguration('tokenExpiration', null);
 
-    return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $version, 'main', 'spotifyControl')));
+    return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $jeedomVersion, 'main', 'spotifyControl')));
   }
 
   private function getSpotifyApi()
@@ -146,17 +146,17 @@ class spotifyControl extends eqLogic
     return $api;
   }
 
-  private function loginHtml($_version = 'dashboard')
+  private function loginHtml($_version, $jeedomVersion)
   {
     $state = self::generateRandomString();
-      $this->setConfiguration('state', $state);
-      $this->save();
+    $this->setConfiguration('state', $state);
+    $this->save();
 
-      $replace['#clientid#'] = $this->getConfiguration('clientId', '');
-      $replace['#redirecturi#'] = $this->getConfiguration('redirectUri', '');
-      $replace['#state#'] = $this->getConfiguration('state', $state);
+    $replace['#clientid#'] = $this->getConfiguration('clientId', '');
+    $replace['#redirecturi#'] = $this->getConfiguration('redirectUri', '');
+    $replace['#state#'] = $this->getConfiguration('state', $state);
 
-      return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $version, 'login', 'spotifyControl')));
+    return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $jeedomVersion, 'login', 'spotifyControl')));
   }
 
   /*     * **********************Getteur Setteur*************************** */
