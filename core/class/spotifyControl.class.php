@@ -102,32 +102,61 @@ class spotifyControl extends eqLogic
 
   }
 
-  public function saveTokens($accessToken, $refreshToken)
+  public function saveTokens($accessToken, $refreshToken, $tokenExpiration)
   {
     $this->setConfiguration('accessToken', $accessToken);
     $this->setConfiguration('refreshToken', $refreshToken);
+    $this->setConfiguration('tokenExpiration', $tokenExpiration);
+
     $this->save();
   }
 
   public function toHtml($_version = 'dashboard')
   {
-    $this->saveTokens('', '');
     $replace = [];
     $version = jeedom::versionAlias($_version);
 
     $accessToken = $this->getConfiguration('accessToken', null);
     if ($accessToken === null) {
-      $state = self::generateRandomString();
+      $this->loginHtml($_version);
+    }
+
+    $replace['#devices#'] = json_encode($this->getSpotifyApi()->getMyDevices());
+    $replace['#expiration#'] = $this->getConfiguration('tokenExpiration', null);
+
+    return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $version, 'main', 'spotifyControl')));
+  }
+
+  private function getSpotifyApi()
+  {
+    $session = new SpotifyWebAPI\Session(
+      $this->getConfiguration('clientId', ''),
+      $this->getConfiguration('clientSecret', ''),
+      $this->getConfiguration('redirectUri', '')
+    );
+
+    if ($this->getConfiguration('tokenExpiration', null)) {
+      $session->refreshAccessToken($this->getConfiguration('refreshToken', null));
+      $this->saveTokens($session->getAccessToken(), $session->getRefreshToken(), $session->getTokenExpiration());
+    }
+
+    $api = new SpotifyWebAPI\SpotifyWebAPI();
+    $api->setAccessToken($this->getConfiguration('accessToken', null));
+
+    return $api;
+  }
+
+  private function loginHtml($_version = 'dashboard')
+  {
+    $state = self::generateRandomString();
       $this->setConfiguration('state', $state);
       $this->save();
 
       $replace['#clientid#'] = $this->getConfiguration('clientId', '');
       $replace['#redirecturi#'] = $this->getConfiguration('redirectUri', '');
       $replace['#state#'] = $this->getConfiguration('state', $state);
-      return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $version, 'login', 'spotifyControl')));
-    }
 
-    return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $version, 'main', 'spotifyControl')));
+      return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $version, 'login', 'spotifyControl')));
   }
 
   /*     * **********************Getteur Setteur*************************** */
