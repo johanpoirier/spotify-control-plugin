@@ -3,8 +3,8 @@
     <button class="btn btn-default action" id="spotifyControl-login-btn">Login</button>
 </div>
 <script type="text/javascript">
-    const client_id = '#client_id#';
-    const redirect_uri = '#redirect_uri#';
+    const client_id = '#clientid#';
+    const redirect_uri = '#redirecturi#';
 
     const generateRandomString = function(length) {
         let text = '';
@@ -31,7 +31,8 @@
             state: state
         };
 
-        const strWindowFeatures = "menubar=no,location=no,resizable=no,scrollbars=yes,status=no";
-        window.open('https://accounts.spotify.com/authorize?' + Object.keys(data).map(key => `${key}=${encodeURIComponent(data[key])}`).join('&'), strWindowFeatures);
+        const strWindowFeatures = "width=420,height=230,menubar=no,location=no,resizable=no,scrollbars=yes,status=no";
+        const spotifyLoginUrl = 'https://accounts.spotify.com/authorize?' + Object.keys(data).map(key => `${key}=${encodeURIComponent(data[key])}`).join('&');
+        window.open(spotifyLoginUrl, 'Spotify', strWindowFeatures);
     });
 </script>
