@@ -1,9 +1,35 @@
-<div class="eqLogic-widget eqLogic" style="display: flex; flex-direction: row; align-items: center; justify-content: center;">
+<div class="eqLogic-widget eqLogic" style="display: flex; flex-direction: column; align-items: center; justify-content: center; max-width: 300px;">
     <span>Spotify</span>
     <button class="btn btn-default action" id="spotifyControl-login-btn">Login</button>
 </div>
 <script type="text/javascript">
+    const redirect_uri = '';
+    const client_id = '';
+
+    const generateRandomString = function(length) {
+        let text = '';
+        const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+
+        for (let i = 0; i < length; i++) {
+            text += possible.charAt(Math.floor(Math.random() * possible.length));
+        }
+        return text;
+    };
+
     $('#spotifyControl-login-btn').click(function() {
         console.log('Login to Spotify');
+
+        const state = generateRandomString(16);
+        res.cookie(stateKey, state);
+
+        // your application requests authorization
+        const data = {
+            response_type: 'code',
+            client_id: client_id,
+            scope: 'user-read-private user-read-email streaming playlist-read-private playlist-read-collaborative user-read-playback-state',
+            redirect_uri: redirect_uri,
+            state: state
+        };
+        window.open('https://accounts.spotify.com/authorize?' + Object.keys(data).map(key => `${key}=${encodeURIComponent(data[key])}`).join('&'));
     });
 </script>
