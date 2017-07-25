@@ -93,6 +93,13 @@ class spotifyControl extends eqLogic
 
   }
 
+  public function saveTokens($accessToken, $refreshToken)
+  {
+    $this->setConfiguration('accessToken', $accessToken);
+    $this->setConfiguration('refreshToken', $refreshToken);
+    $this->save();
+  }
+
   public function toHtml($_version = 'dashboard')
   {
     $replace = [];

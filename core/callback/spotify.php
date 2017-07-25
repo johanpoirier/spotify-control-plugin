@@ -30,13 +30,12 @@ $session->requestAccessToken($_GET['code']);
 $api = new SpotifyWebAPI\SpotifyWebAPI();
 $api->setAccessToken($session->getAccessToken());
 
-$spotifyControl->setConfiguration('accessToken', $session->getAccessToken());
-$spotifyControl->setConfiguration('refreshToken', $session->getRefreshToken());
+$spotifyControl->saveTokens($session->getAccessToken(), $session->getRefreshToken());
 
 ?>
 <html>
 <body>
-<?php print_r($api->me()) ?>
+<?= $session->getRefreshToken() ?>
 <script type="text/javascript">
     //window.close();
 </script>
