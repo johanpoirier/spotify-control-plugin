@@ -49,7 +49,16 @@ class spotifyControl extends eqLogic
 
     }
    */
-
+  private static function generateRandomString($length = 10)
+  {
+    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    $charactersLength = strlen($characters);
+    $randomString = '';
+    for ($i = 0; $i < $length; $i++) {
+      $randomString .= $characters[rand(0, $charactersLength - 1)];
+    }
+    return $randomString;
+  }
 
   /*     * *********************Méthodes d'instance************************* */
 
@@ -102,13 +111,19 @@ class spotifyControl extends eqLogic
 
   public function toHtml($_version = 'dashboard')
   {
+    $this->saveTokens('', '');
     $replace = [];
     $version = jeedom::versionAlias($_version);
 
     $accessToken = $this->getConfiguration('accessToken', null);
     if ($accessToken === null) {
+      $state = self::generateRandomString();
+      $this->setConfiguration('state', $state);
+      $this->save();
+
       $replace['#clientid#'] = $this->getConfiguration('clientId', '');
       $replace['#redirecturi#'] = $this->getConfiguration('redirectUri', '');
+      $replace['#state#'] = $this->getConfiguration('state', $state);
       return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $version, 'login', 'spotifyControl')));
     }
 

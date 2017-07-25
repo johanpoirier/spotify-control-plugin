@@ -5,22 +5,10 @@
 <script type="text/javascript">
     const client_id = '#clientid#';
     const redirect_uri = '#redirecturi#';
-
-    const generateRandomString = function(length) {
-        let text = '';
-        const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-
-        for (let i = 0; i < length; i++) {
-            text += possible.charAt(Math.floor(Math.random() * possible.length));
-        }
-        return text;
-    };
+    const state = '#state#';
 
     $('#spotifyControl-login-btn').click(function() {
         console.log('Login to Spotify');
-
-        const state = generateRandomString(16);
-        //res.cookie(stateKey, state);
 
         // your application requests authorization
         const data = {
@@ -31,7 +19,7 @@
             state: state
         };
 
-        const strWindowFeatures = "width=420,height=230,menubar=no,location=no,resizable=no,scrollbars=yes,status=no";
+        const strWindowFeatures = "width=240,height=420,menubar=no,location=no,resizable=no,scrollbars=no,status=no";
         const spotifyLoginUrl = 'https://accounts.spotify.com/authorize?' + Object.keys(data).map(key => `${key}=${encodeURIComponent(data[key])}`).join('&');
         window.open(spotifyLoginUrl, 'Spotify', strWindowFeatures);
     });

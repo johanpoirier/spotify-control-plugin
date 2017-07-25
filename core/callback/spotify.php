@@ -18,6 +18,11 @@ require_once __DIR__ . '/../../../../core/php/core.inc.php';
 require_once __DIR__ . '/../../vendor/autoload.php';
 
 $spotifyControl = spotifyControl::byId($_GET['id']);
+$spotifyState = $_GET['state'];
+
+if ($spotifyControl->getConfiguration('state', '') !== $spotifyState) {
+    die('Error in spotify callback');
+}
 
 $session = new SpotifyWebAPI\Session(
   $spotifyControl->getConfiguration('clientId', ''),
