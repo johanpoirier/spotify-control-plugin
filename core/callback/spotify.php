@@ -15,8 +15,30 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 require_once __DIR__ . '/../../../../core/php/core.inc.php';
-
-echo 'Access code: ' . htmlspecialchars($_GET['code']);
+require_once __DIR__ . '/../../vendor/autoload.php';
 
 $spotifyControl = spotifyControl::byId($_GET['id']);
-var_dump($spotifyControl);
+
+$session = new SpotifyWebAPI\Session(
+  $spotifyControl->getConfiguration('clientId', ''),
+  $spotifyControl->getConfiguration('clientSecret', ''),
+  $spotifyControl->getConfiguration('redirectUri', '')
+);
+
+$session->requestAccessToken($_GET['code']);
+
+$api = new SpotifyWebAPI\SpotifyWebAPI();
+$api->setAccessToken($session->getAccessToken());
+
+$spotifyControl->setConfiguration('accessToken', $session->getAccessToken());
+$spotifyControl->setConfiguration('refreshToken', $session->getRefreshToken());
+
+?>
+<html>
+<body>
+<?php print_r($api->me()) ?>
+<script type="text/javascript">
+    //window.close();
+</script>
+</body>
+</html>
