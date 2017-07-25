@@ -95,10 +95,7 @@ class spotifyControl extends eqLogic
 
   public function toHtml($_version = 'dashboard')
   {
-    $replace = $this->preToHtml($_version);
-    if (!is_array($replace)) {
-      return $replace;
-    }
+    $replace = [];
     $version = jeedom::versionAlias($_version);
 
     $accessToken = $this->getConfiguration('accessToken', null);
