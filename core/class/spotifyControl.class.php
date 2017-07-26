@@ -117,12 +117,11 @@ class spotifyControl extends eqLogic
     $jeedomVersion = jeedom::versionAlias($_version);
 
     $tokenExpiration = $this->getConfiguration('tokenExpiration', null);
-    if ($tokenExpiration === null) {
+    if ($tokenExpiration === null || time() > $tokenExpiration) {
       return $this->loginHtml($_version, $jeedomVersion);
     }
 
     $replace['#devices#'] = json_encode($this->getSpotifyApi()->getMyDevices());
-    $replace['#expiration#'] = $this->getConfiguration('tokenExpiration', null);
 
     return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $jeedomVersion, 'main', 'spotifyControl')));
   }

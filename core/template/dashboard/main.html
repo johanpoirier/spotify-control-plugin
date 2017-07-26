@@ -3,5 +3,13 @@
     <span class="statusCmd" style="position : absolute;left : 5px; width : 30px;z-index: 1030;"></span>
     <i class='fa fa-refresh pull-right cursor refresh' style="margin-top: 3px;margin-right: 3px;"></i>
     <pre>#devices#</pre>
-    <span>#expiration#</span>
+    <div class="spotify-devices"></div>
 </div>
+<script type="text/javascript">
+    const devices = #devices#.devices;
+    devices.forEach(device => {
+        const deviceElement = document.createElement('div');
+        deviceElement.innerHTML = device.name;
+        document.querySelector('.spotify-devices').appendChild(deviceElement);
+    });
+</script>
