@@ -120,33 +120,34 @@ $eqLogics = eqLogic::byType($plugin->getId());
                         <div class="form-group">
                             <label class="col-sm-3 control-label">{{client_id}}</label>
                             <div class="col-sm-3">
-                                <input type="text" class="eqLogicAttr configuration form-control" data-l1key="configuration" data-l2key="clientId" />
+                                <input type="text" class="eqLogicAttr configuration form-control"
+                                       data-l1key="configuration" data-l2key="clientId"/>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-3 control-label">{{client_secret}}</label>
                             <div class="col-sm-3">
-                                <input type="text" class="eqLogicAttr configuration form-control" data-l1key="configuration" data-l2key="clientSecret" />
+                                <input type="text" class="eqLogicAttr configuration form-control"
+                                       data-l1key="configuration" data-l2key="clientSecret"/>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-3 control-label">{{redirect_uri}}</label>
                             <div class="col-sm-3">
-                                <input type="text" class="eqLogicAttr configuration form-control" data-l1key="configuration" data-l2key="redirectUri" />
+                                <input type="text" class="eqLogicAttr configuration form-control"
+                                       data-l1key="configuration" data-l2key="redirectUri"/>
                             </div>
                         </div>
                     </fieldset>
                 </form>
             </div>
             <div role="tabpanel" class="tab-pane" id="commandtab">
-                <a class="btn btn-success btn-sm cmdAction pull-right" data-action="add" style="margin-top:5px;"><i
-                            class="fa fa-plus-circle"></i> {{Commandes}}</a><br/><br/>
                 <table id="table_cmd" class="table table-bordered table-condensed">
                     <thead>
                     <tr>
                         <th>{{Nom}}</th>
-                        <th>{{Type}}</th>
-                        <th>{{Action}}</th>
+                        <th>{{Options}}</th>
+                        <th></th>
                     </tr>
                     </thead>
                     <tbody>
