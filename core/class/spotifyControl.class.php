@@ -62,6 +62,14 @@ class spotifyControl extends eqLogic
     $this->getSpotifyApi()->play();
   }
 
+  /**
+   * Pauses user's playback on current device
+   */
+  public function pause()
+  {
+    $this->getSpotifyApi()->pause();
+  }
+
   public function preInsert()
   {
 
@@ -99,6 +107,17 @@ class spotifyControl extends eqLogic
     $play->setType('action');
     $play->setSubType('other');
     $play->save();
+
+    $pause = $this->getCmd(null, 'pause');
+    if (!is_object($pause)) {
+      $pause = new spotifyControlCmd();
+      $pause->setName('Pause');
+    }
+    $pause->setEqLogic_id($this->getId());
+    $pause->setLogicalId('pause');
+    $pause->setType('action');
+    $pause->setSubType('other');
+    $pause->save();
   }
 
   public function preRemove()
@@ -130,12 +149,15 @@ class spotifyControl extends eqLogic
       return $this->loginHtml($_version, $jeedomVersion);
     }
 
-    $replace['#time#'] = time();
-    $replace['#tokenExpiration#'] = $this->getConfiguration('tokenExpiration', null);
+    // User's devices
     $replace['#devices#'] = json_encode($this->getSpotifyApi()->getMyDevices());
 
+    // Commands
     $playCmd = $this->getCmd(null, 'play');
     $replace['#play_id#'] = is_object($playCmd) ? $playCmd->getId() : '';
+
+    $pauseCmd = $this->getCmd(null, 'pause');
+    $replace['#pause_id#'] = is_object($pauseCmd) ? $pauseCmd->getId() : '';
 
     return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $jeedomVersion, 'main', 'spotifyControl')));
   }
@@ -156,12 +178,19 @@ class spotifyControl extends eqLogic
 
 class spotifyControlCmd extends cmd
 {
-
   public function execute()
   {
-    if ($this->getLogicalId() === 'play') {
-      $this->getEqLogic()->play();
+    $cmd = $this->getLogicalId();
+
+    switch ($cmd) {
+      case 'play':
+        $this->getEqLogic()->play();
+        break;
+      case 'pause':
+        $this->getEqLogic()->pause();
+        break;
     }
+
     return false;
   }
 }

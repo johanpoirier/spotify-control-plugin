@@ -6,11 +6,8 @@
     }
 </style>
 <div class="eqLogic-widget eqLogic" style="width: 350px;" data-eqLogic_id="#id#" data-eqLogic_uid="#uid#" data-version="#version#">
-    <span class="statusCmd" style="position : absolute;left : 5px; width : 30px;z-index: 1030;"></span>
-    <i class='fa fa-refresh pull-right cursor refresh' style="margin-top: 3px;margin-right: 3px;"></i>
-    <span>Time: #time#</span>
-    <span>Expiration: #tokenExpiration#</span>
     <button class="btn btn-default btn-spotify-play" data-cmd_id="#play_id#">Play</button>
+    <button class="btn btn-default btn-spotify-pause" data-cmd_id="#pause_id#">Pause</button>
     <div class="spotify-devices"></div>
 </div>
 <script type="text/javascript">
@@ -21,8 +18,12 @@
         document.querySelector('.spotify-devices').appendChild(deviceElement);
     });
 
-    $('.btn-spotify-play').click(() => {
-        console.log('play user playback');
-        jeedom.cmd.execute({id: '#play_id#'});
-    })
+    $('.btn').click(function() {
+        const btn = $(this);
+        const cmd = btn.data('cmd_id');
+        if (cmd) {
+            console.log(`Spotify control: command ${cmd}`);
+            jeedom.cmd.execute({id: cmd});
+        }
+    });
 </script>
