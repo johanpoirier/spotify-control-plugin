@@ -1,11 +1,11 @@
 {
   "plugins\/spotifyControl\/desktop\/php\/spotifyControl.php": {
-    "plugin_title": "Spotify Control",
-    "my_accounts": "My accounts",
-    "add_account": "Add a Spotify account",
-    "account_name": "Spotify account name",
-    "client_id": "Client ID",
-    "client_secret": "Client Secret",
-    "redirect_uri": "Redirect URI"
+    "Spotify Control": "Spotify Control",
+    "Mes comptes": "My accounts",
+    "Ajouter un compte Spotify": "Add a Spotify account",
+    "Nom du compte Spotify": "Spotify account name",
+    "Client ID": "Client ID",
+    "Client Secret": "Client Secret",
+    "Redirect URI": "Redirect URI"
   }
 }
