@@ -87,7 +87,29 @@ class spotifyControl extends eqLogic
 
   public function postSave()
   {
+    $play = $this->getCmd(null, 'play');
+    if (!is_object($play)) {
+      $play = new spotifyControlCmd();
+      $play->setLogicalId('play');
+      $play->setIsVisible(1);
+      $play->setName('Play');
+    }
+    $play->setEqLogic_id($this->getId());
+    $play->setType('action');
+    $play->setSubType('other');
+    $play->save();
 
+    $pause = $this->getCmd(null, 'pause');
+    if (!is_object($pause)) {
+      $pause = new spotifyControlCmd();
+      $pause->setLogicalId('pause');
+      $pause->setIsVisible(1);
+      $pause->setName('Pause');
+    }
+    $pause->setEqLogic_id($this->getId());
+    $pause->setType('action');
+    $pause->setSubType('other');
+    $pause->save();
   }
 
   public function preUpdate()
@@ -97,27 +119,7 @@ class spotifyControl extends eqLogic
 
   public function postUpdate()
   {
-    $play = $this->getCmd(null, 'play');
-    if (!is_object($play)) {
-      $play = new spotifyControlCmd();
-      $play->setName('Play');
-    }
-    $play->setEqLogic_id($this->getId());
-    $play->setLogicalId('play');
-    $play->setType('action');
-    $play->setSubType('other');
-    $play->save();
 
-    $pause = $this->getCmd(null, 'pause');
-    if (!is_object($pause)) {
-      $pause = new spotifyControlCmd();
-      $pause->setName('Pause');
-    }
-    $pause->setEqLogic_id($this->getId());
-    $pause->setLogicalId('pause');
-    $pause->setType('action');
-    $pause->setSubType('other');
-    $pause->save();
   }
 
   public function preRemove()
