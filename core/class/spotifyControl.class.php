@@ -116,13 +116,13 @@ class spotifyControl extends eqLogic
     $replace = [];
     $jeedomVersion = jeedom::versionAlias($_version);
 
-    $tokenExpiration = $this->getConfiguration('tokenExpiration', null);
-    if ($tokenExpiration === null || time() > $tokenExpiration) {
+    $refreshToken = $this->getConfiguration('refreshToken', null);
+    if ($refreshToken === null || $refreshToken === '') {
       return $this->loginHtml($_version, $jeedomVersion);
     }
 
     $replace['#time#'] = time();
-    $replace['#tokenExpiration#'] = $tokenExpiration;
+    $replace['#tokenExpiration#'] = $this->getConfiguration('tokenExpiration', null);
     $replace['#devices#'] = json_encode($this->getSpotifyApi()->getMyDevices());
 
     return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $jeedomVersion, 'main', 'spotifyControl')));
@@ -150,7 +150,7 @@ class spotifyControl extends eqLogic
     );
 
     $tokenExpiration = $this->getConfiguration('tokenExpiration', null);
-    if ($tokenExpiration === null || time() > $tokenExpiration) {
+    if ($tokenExpiration === null || time() > $tokenExpiration - 10) {
       $session->refreshAccessToken($this->getConfiguration('refreshToken', null));
       $this->saveTokens($session->getAccessToken(), $session->getRefreshToken(), $session->getTokenExpiration());
     }
