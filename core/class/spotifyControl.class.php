@@ -16,39 +16,12 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* * ***************************Includes********************************* */
 require_once __DIR__ . '/../../../../core/php/core.inc.php';
 require_once __DIR__ . '/../../vendor/autoload.php';
 
 
 class spotifyControl extends eqLogic
 {
-  /*     * *************************Attributs****************************** */
-
-
-  /*     * ***********************Methode static*************************** */
-
-  /*
-   * Fonction exécutée automatiquement toutes les minutes par Jeedom
-    public static function cron() {
-
-    }
-   */
-
-
-  /*
-   * Fonction exécutée automatiquement toutes les heures par Jeedom
-    public static function cronHourly() {
-
-    }
-   */
-
-  /*
-   * Fonction exécutée automatiquement tous les jours par Jeedom
-    public static function cronDayly() {
-
-    }
-   */
   private static function generateRandomString($length = 10)
   {
     $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -60,7 +33,34 @@ class spotifyControl extends eqLogic
     return $randomString;
   }
 
-  /*     * *********************Méthodes d'instance************************* */
+
+  private function getSpotifyApi()
+  {
+    $session = new SpotifyWebAPI\Session(
+      $this->getConfiguration('clientId', ''),
+      $this->getConfiguration('clientSecret', ''),
+      $this->getConfiguration('redirectUri', '')
+    );
+
+    $tokenExpiration = $this->getConfiguration('tokenExpiration', null);
+    if ($tokenExpiration === null || time() > $tokenExpiration - 10) {
+      $session->refreshAccessToken($this->getConfiguration('refreshToken', null));
+      $this->saveTokens($session->getAccessToken(), $session->getRefreshToken(), $session->getTokenExpiration());
+    }
+
+    $api = new SpotifyWebAPI\SpotifyWebAPI();
+    $api->setAccessToken($this->getConfiguration('accessToken', null));
+
+    return $api;
+  }
+
+  /**
+   * Starts user's playback on current device
+   */
+  public function play()
+  {
+    $this->getSpotifyApi()->play();
+  }
 
   public function preInsert()
   {
@@ -89,7 +89,16 @@ class spotifyControl extends eqLogic
 
   public function postUpdate()
   {
-
+    $play = $this->getCmd(null, 'play');
+    if (!is_object($play)) {
+      $play = new spotifyControlCmd();
+      $play->setName('Play');
+    }
+    $play->setEqLogic_id($this->getId());
+    $play->setLogicalId('play');
+    $play->setType('action');
+    $play->setSubType('other');
+    $play->save();
   }
 
   public function preRemove()
@@ -125,6 +134,9 @@ class spotifyControl extends eqLogic
     $replace['#tokenExpiration#'] = $this->getConfiguration('tokenExpiration', null);
     $replace['#devices#'] = json_encode($this->getSpotifyApi()->getMyDevices());
 
+    $playCmd = $this->getCmd(null, 'play');
+    $replace['#play_id#'] = is_object($playCmd) ? $playCmd->getId() : '';
+
     return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $jeedomVersion, 'main', 'spotifyControl')));
   }
 
@@ -140,53 +152,16 @@ class spotifyControl extends eqLogic
 
     return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $jeedomVersion, 'login', 'spotifyControl')));
   }
-
-  private function getSpotifyApi()
-  {
-    $session = new SpotifyWebAPI\Session(
-      $this->getConfiguration('clientId', ''),
-      $this->getConfiguration('clientSecret', ''),
-      $this->getConfiguration('redirectUri', '')
-    );
-
-    $tokenExpiration = $this->getConfiguration('tokenExpiration', null);
-    if ($tokenExpiration === null || time() > $tokenExpiration - 10) {
-      $session->refreshAccessToken($this->getConfiguration('refreshToken', null));
-      $this->saveTokens($session->getAccessToken(), $session->getRefreshToken(), $session->getTokenExpiration());
-    }
-
-    $api = new SpotifyWebAPI\SpotifyWebAPI();
-    $api->setAccessToken($this->getConfiguration('accessToken', null));
-
-    return $api;
-  }
-
-  /*     * **********************Getteur Setteur*************************** */
 }
 
 class spotifyControlCmd extends cmd
 {
-  /*     * *************************Attributs****************************** */
 
-
-  /*     * ***********************Methode static*************************** */
-
-
-  /*     * *********************Methode d'instance************************* */
-
-  /*
-   * Non obligatoire permet de demander de ne pas supprimer les commandes même si elles ne sont pas dans la nouvelle configuration de l'équipement envoyé en JS
-    public function dontRemoveCmd() {
-    return true;
-    }
-   */
-
-  public function execute($_options = array())
+  public function execute()
   {
-
+    if ($this->getLogicalId() === 'play') {
+      $this->getEqLogic()->play();
+    }
+    return false;
   }
-
-  /*     * **********************Getteur Setteur*************************** */
 }
-
-?>
