@@ -121,28 +121,11 @@ class spotifyControl extends eqLogic
       return $this->loginHtml($_version, $jeedomVersion);
     }
 
+    $replace['#time#'] = time();
+    $replace['#tokenExpiration#'] = $tokenExpiration;
     $replace['#devices#'] = json_encode($this->getSpotifyApi()->getMyDevices());
 
     return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $jeedomVersion, 'main', 'spotifyControl')));
-  }
-
-  private function getSpotifyApi()
-  {
-    $session = new SpotifyWebAPI\Session(
-      $this->getConfiguration('clientId', ''),
-      $this->getConfiguration('clientSecret', ''),
-      $this->getConfiguration('redirectUri', '')
-    );
-
-    if ($this->getConfiguration('tokenExpiration', null)) {
-      $session->refreshAccessToken($this->getConfiguration('refreshToken', null));
-      $this->saveTokens($session->getAccessToken(), $session->getRefreshToken(), $session->getTokenExpiration());
-    }
-
-    $api = new SpotifyWebAPI\SpotifyWebAPI();
-    $api->setAccessToken($this->getConfiguration('accessToken', null));
-
-    return $api;
   }
 
   private function loginHtml($_version, $jeedomVersion)
@@ -156,6 +139,26 @@ class spotifyControl extends eqLogic
     $replace['#state#'] = $this->getConfiguration('state', $state);
 
     return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $jeedomVersion, 'login', 'spotifyControl')));
+  }
+
+  private function getSpotifyApi()
+  {
+    $session = new SpotifyWebAPI\Session(
+      $this->getConfiguration('clientId', ''),
+      $this->getConfiguration('clientSecret', ''),
+      $this->getConfiguration('redirectUri', '')
+    );
+
+    $tokenExpiration = $this->getConfiguration('tokenExpiration', null);
+    if ($tokenExpiration === null || time() > $tokenExpiration) {
+      $session->refreshAccessToken($this->getConfiguration('refreshToken', null));
+      $this->saveTokens($session->getAccessToken(), $session->getRefreshToken(), $session->getTokenExpiration());
+    }
+
+    $api = new SpotifyWebAPI\SpotifyWebAPI();
+    $api->setAccessToken($this->getConfiguration('accessToken', null));
+
+    return $api;
   }
 
   /*     * **********************Getteur Setteur*************************** */
