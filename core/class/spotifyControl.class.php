@@ -101,6 +101,14 @@ class spotifyControl extends eqLogic
   }
 
   /**
+   * Set volume on active device
+   */
+  public function reset()
+  {
+    $this->saveTokens(null, null, null);
+  }
+
+  /**
    *
    */
   public function postSave()
@@ -152,6 +160,18 @@ class spotifyControl extends eqLogic
     $setVolume->setType('action');
     $setVolume->setSubType('other');
     $setVolume->save();
+
+    $reset = $this->getCmd(null, 'reset');
+    if (!is_object($reset)) {
+      $reset = new spotifyControlCmd();
+      $reset->setLogicalId('reset');
+      $reset->setIsVisible(1);
+      $reset->setName('Reset');
+    }
+    $reset->setEqLogic_id($this->getId());
+    $reset->setType('action');
+    $reset->setSubType('other');
+    $reset->save();
   }
 
   public function saveTokens($accessToken, $refreshToken, $tokenExpiration)
@@ -226,6 +246,9 @@ class spotifyControlCmd extends cmd
       case 'setVolume':
         $percent = 30;
         $this->getEqLogic()->setVolume($percent);
+        break;
+      case 'reset':
+        $this->getEqLogic()->reset();
         break;
     }
 
