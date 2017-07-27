@@ -32,7 +32,7 @@
         if (cmd) {
             const options = { id: cmd, value: {} };
             if (btn[0].hasAttribute('data-device_id')) {
-                options.value.device_id = btn.data('device_id');
+                options.value.string = btn.data('device_id');
             }
             jeedom.cmd.execute(options);
         }

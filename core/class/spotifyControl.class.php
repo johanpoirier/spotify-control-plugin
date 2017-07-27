@@ -153,7 +153,7 @@ class spotifyControl extends eqLogic
     }
     $changeDevice->setEqLogic_id($this->getId());
     $changeDevice->setType('action');
-    $changeDevice->setSubType('other');
+    $changeDevice->setSubType('string');
     $changeDevice->save();
 
     $volume = $this->getCmd(null, 'volume');
@@ -261,7 +261,7 @@ class spotifyControlCmd extends cmd
       case 'pause':
         return $this->getEqLogic()->pause();
       case 'changeDevice':
-        $deviceId = $options['device_id'];
+        $deviceId = $options['string'];
         return $this->getEqLogic()->changeDevice($deviceId) ? 'Device changed' : 'error';
       case 'setVolume':
         $percent = $options['slider'];
