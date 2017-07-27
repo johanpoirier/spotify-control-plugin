@@ -5,5 +5,7 @@
   "licence": "MIT",
   "author": "Johan Poirier",
   "require": "3.0",
-  "category": "multimedia"
+  "category": "multimedia",
+  "display" : "panel",
+  "mobile" : "panel"
 }
