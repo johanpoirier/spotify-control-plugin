@@ -6,6 +6,5 @@
   "author": "Johan Poirier",
   "require": "3.0",
   "category": "multimedia",
-  "display" : "panel",
   "mobile" : "panel"
 }
