@@ -118,79 +118,86 @@ class spotifyControl extends eqLogic
   /**
    *
    */
-  public function postSave()
+  public function postUpdate()
   {
     $play = $this->getCmd(null, 'play');
     if (!is_object($play)) {
       $play = new spotifyControlCmd();
-      $play->setLogicalId('play');
-      $play->setIsVisible(1);
-      $play->setName('Play');
     }
+    $play->setName('Play');
+    $play->setLogicalId('play');
     $play->setEqLogic_id($this->getId());
     $play->setType('action');
     $play->setSubType('other');
+    $play->setIsVisible(1);
+    $play->setDisplay('generic_type', 'SPOTIFY_PLAY');
     $play->save();
 
     $pause = $this->getCmd(null, 'pause');
     if (!is_object($pause)) {
       $pause = new spotifyControlCmd();
-      $pause->setLogicalId('pause');
-      $pause->setIsVisible(1);
-      $pause->setName('Pause');
     }
+    $pause->setName('Pause');
+    $pause->setLogicalId('pause');
     $pause->setEqLogic_id($this->getId());
     $pause->setType('action');
     $pause->setSubType('other');
+    $pause->setIsVisible(1);
+    $pause->setDisplay('generic_type', 'SPOTIFY_PAUSE');
     $pause->save();
 
     $changeDevice = $this->getCmd(null, 'changeDevice');
     if (!is_object($changeDevice)) {
       $changeDevice = new spotifyControlCmd();
-      $changeDevice->setLogicalId('changeDevice');
-      $changeDevice->setIsVisible(1);
-      $changeDevice->setName('Change device');
     }
+    $changeDevice->setName('Change device');
     $changeDevice->setEqLogic_id($this->getId());
+    $changeDevice->setLogicalId('changeDevice');
     $changeDevice->setType('action');
     $changeDevice->setSubType('slider');
+    $changeDevice->setIsVisible(1);
+    $changeDevice->setDisplay('generic_type', 'SPOTIFY_CHANGE_DEVICE');
     $changeDevice->save();
 
     $volume = $this->getCmd(null, 'volume');
     if (!is_object($volume)) {
       $volume = new spotifyControlCmd();
-      $volume->setLogicalId('volume');
-      $volume->setName('Volume');
     }
+    $volume->setName('Volume');
     $volume->setUnite('%');
+    $volume->setEqLogic_id($this->getId());
+    $volume->setLogicalId('volume');
     $volume->setType('info');
     $volume->setSubType('numeric');
     $volume->setConfiguration('repeatEventManagement', 'never');
-    $volume->setEqLogic_id($this->getId());
+    $volume->setIsVisible(1);
+    $volume->setDisplay('generic_type', 'SPOTIFY_VOLUME');
     $volume->save();
 
     $setVolume = $this->getCmd(null, 'setVolume');
     if (!is_object($setVolume)) {
       $setVolume = new spotifyControlCmd();
-      $setVolume->setLogicalId('setVolume');
-      $setVolume->setIsVisible(1);
-      $setVolume->setName('Set volume');
     }
+    $setVolume->setName('Set volume');
+    $setVolume->setLogicalId('setVolume');
     $setVolume->setEqLogic_id($this->getId());
     $setVolume->setType('action');
     $setVolume->setSubType('slider');
+    $setVolume->setIsVisible(1);
+    $setVolume->setDisplay('generic_type', 'SPOTIFY_SET_VOLUME');
     $setVolume->save();
 
     $reset = $this->getCmd(null, 'reset');
     if (!is_object($reset)) {
       $reset = new spotifyControlCmd();
-      $reset->setLogicalId('reset');
-      $reset->setIsVisible(1);
-      $reset->setName('Reset');
     }
+    $reset->setName('Reset');
+    $reset->setLogicalId('reset');
     $reset->setEqLogic_id($this->getId());
     $reset->setType('action');
     $reset->setSubType('other');
+    $reset->setIsVisible(1);
+    $reset->setDisplay('generic_type', 'SPOTIFY_RESET');
     $reset->save();
   }
 
