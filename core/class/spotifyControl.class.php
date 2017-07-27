@@ -154,6 +154,19 @@ class spotifyControl extends eqLogic
     $changeDevice->setSubType('other');
     $changeDevice->save();
 
+    $volume = $this->getCmd(null, 'volume');
+    if (!is_object($volume)) {
+      $volume = new spotifyControlCmd();
+      $volume->setLogicalId('volume');
+      $volume->setName('Volume');
+    }
+    $volume->setUnite('%');
+    $volume->setType('info');
+    $volume->setSubType('numeric');
+    $volume->setConfiguration('repeatEventManagement', 'never');
+    $volume->setEqLogic_id($this->getId());
+    $volume->save();
+
     $setVolume = $this->getCmd(null, 'setVolume');
     if (!is_object($setVolume)) {
       $setVolume = new spotifyControlCmd();
@@ -163,7 +176,7 @@ class spotifyControl extends eqLogic
     }
     $setVolume->setEqLogic_id($this->getId());
     $setVolume->setType('action');
-    $setVolume->setSubType('other');
+    $setVolume->setSubType('slider');
     $setVolume->save();
 
     $reset = $this->getCmd(null, 'reset');
