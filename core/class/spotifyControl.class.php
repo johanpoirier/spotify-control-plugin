@@ -61,6 +61,7 @@ class spotifyControl extends eqLogic
    */
   public function play()
   {
+    log::add('spotifyControl', 'debug', 'Play');
     return $this->getSpotifyApi()->play();
   }
 
@@ -71,6 +72,7 @@ class spotifyControl extends eqLogic
    */
   public function pause()
   {
+    log::add('spotifyControl', 'debug', 'Pause');
     return $this->getSpotifyApi()->pause();
   }
 
@@ -83,6 +85,7 @@ class spotifyControl extends eqLogic
   public function changeDevice($deviceId)
   {
     $this->pause();
+    log::add('spotifyControl', 'debug', "Change device with id $deviceId");
     return $this->getSpotifyApi()->changeMyDevice([
       'device_ids' => [ $deviceId ],
       'play' => true
@@ -97,6 +100,7 @@ class spotifyControl extends eqLogic
    */
   public function setVolume($percent)
   {
+    log::add('spotifyControl', 'debug', "Change volume to $percent");
     return $this->getSpotifyApi()->changeVolume($percent);
   }
 
@@ -105,6 +109,7 @@ class spotifyControl extends eqLogic
    */
   public function reset()
   {
+    log::add('spotifyControl', 'debug', 'Reset');
     $this->saveTokens(null, null, null);
   }
 
