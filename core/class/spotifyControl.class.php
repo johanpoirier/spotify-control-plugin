@@ -72,14 +72,18 @@ class spotifyControl extends eqLogic
 
   /**
    * Changes user's active device
+   *
+   * @param int $deviceId
    */
   public function changeDevice($deviceId = 1)
   {
-    $this->getSpotifyApi()->changeMyDevice([$deviceId]);
+    $this->getSpotifyApi()->changeMyDevice([ 'device_ids' => $deviceId ]);
   }
 
   /**
    * Set volume on active device
+   *
+   * @param $percent
    */
   public function setVolume($percent)
   {
@@ -186,7 +190,7 @@ class spotifyControl extends eqLogic
 
     $replace['#clientid#'] = $this->getConfiguration('clientId', '');
     $replace['#redirecturi#'] = $this->getConfiguration('redirectUri', '');
-    $replace['#state#'] = $this->getConfiguration('state', $state);
+    $replace['#state#'] = $state;
 
     return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $jeedomVersion, 'login', 'spotifyControl')));
   }
