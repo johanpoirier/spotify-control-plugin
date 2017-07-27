@@ -22,6 +22,7 @@
             deviceElement.classList.add('btn-primary');
         }
         deviceElement.setAttribute('data-cmd_id', #changeDevice_id#);
+        deviceElement.setAttribute('data-device_id', device.id);
         document.querySelector('.spotify-devices').appendChild(deviceElement);
     });
 
@@ -29,8 +30,11 @@
         const btn = $(this);
         const cmd = btn.data('cmd_id');
         if (cmd) {
-            console.log(`Spotify control: command ${cmd}`);
-            jeedom.cmd.execute({id: cmd});
+            const options = { id: cmd };
+            if (btn[0].hasAttribute('data-device_id')) {
+                options.device_id = btn.data('device_id');
+            }
+            jeedom.cmd.execute(options);
         }
     });
 </script>

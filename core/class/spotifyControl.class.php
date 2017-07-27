@@ -56,38 +56,48 @@ class spotifyControl extends eqLogic
 
   /**
    * Starts user's playback on current device
+   *
+   * @return boolean
    */
   public function play()
   {
-    $this->getSpotifyApi()->play();
+    return $this->getSpotifyApi()->play();
   }
 
   /**
    * Pauses user's playback on current device
+   *
+   * @return boolean
    */
   public function pause()
   {
-    $this->getSpotifyApi()->pause();
+    return $this->getSpotifyApi()->pause();
   }
 
   /**
    * Changes user's active device
    *
    * @param int $deviceId
+   * @return boolean
    */
-  public function changeDevice($deviceId = 1)
+  public function changeDevice($deviceId)
   {
-    $this->getSpotifyApi()->changeMyDevice([ 'device_ids' => $deviceId ]);
+    $this->pause();
+    return $this->getSpotifyApi()->changeMyDevice([
+      'device_ids' => [ $deviceId ],
+      'play' => true
+    ]);
   }
 
   /**
    * Set volume on active device
    *
    * @param $percent
+   * @return boolean
    */
   public function setVolume($percent)
   {
-    $this->getSpotifyApi()->changeVolume($percent);
+    return $this->getSpotifyApi()->changeVolume($percent);
   }
 
   /**
@@ -198,7 +208,7 @@ class spotifyControl extends eqLogic
 
 class spotifyControlCmd extends cmd
 {
-  public function execute()
+  public function execute($options = [])
   {
     $cmd = $this->getLogicalId();
 
@@ -210,7 +220,7 @@ class spotifyControlCmd extends cmd
         $this->getEqLogic()->pause();
         break;
       case 'changeDevice':
-        $deviceId = 1;
+        $deviceId = $options['device_id'];
         $this->getEqLogic()->changeDevice($deviceId);
         break;
       case 'setVolume':
