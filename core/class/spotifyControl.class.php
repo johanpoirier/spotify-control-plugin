@@ -70,21 +70,25 @@ class spotifyControl extends eqLogic
     $this->getSpotifyApi()->pause();
   }
 
-  public function preInsert()
+  /**
+   * Changes user's active device
+   */
+  public function changeDevice($deviceId = 1)
   {
-
+    $this->getSpotifyApi()->changeMyDevice([$deviceId]);
   }
 
-  public function postInsert()
+  /**
+   * Set volume on active device
+   */
+  public function setVolume($percent)
   {
-
+    $this->getSpotifyApi()->changeVolume($percent);
   }
 
-  public function preSave()
-  {
-
-  }
-
+  /**
+   *
+   */
   public function postSave()
   {
     $play = $this->getCmd(null, 'play');
@@ -110,26 +114,30 @@ class spotifyControl extends eqLogic
     $pause->setType('action');
     $pause->setSubType('other');
     $pause->save();
-  }
 
-  public function preUpdate()
-  {
+    $changeDevice = $this->getCmd(null, 'changeDevice');
+    if (!is_object($changeDevice)) {
+      $changeDevice = new spotifyControlCmd();
+      $changeDevice->setLogicalId('changeDevice');
+      $changeDevice->setIsVisible(1);
+      $changeDevice->setName('Change device');
+    }
+    $changeDevice->setEqLogic_id($this->getId());
+    $changeDevice->setType('action');
+    $changeDevice->setSubType('other');
+    $changeDevice->save();
 
-  }
-
-  public function postUpdate()
-  {
-
-  }
-
-  public function preRemove()
-  {
-
-  }
-
-  public function postRemove()
-  {
-
+    $setVolume = $this->getCmd(null, 'setVolume');
+    if (!is_object($setVolume)) {
+      $setVolume = new spotifyControlCmd();
+      $setVolume->setLogicalId('setVolume');
+      $setVolume->setIsVisible(1);
+      $setVolume->setName('Set volume');
+    }
+    $setVolume->setEqLogic_id($this->getId());
+    $setVolume->setType('action');
+    $setVolume->setSubType('other');
+    $setVolume->save();
   }
 
   public function saveTokens($accessToken, $refreshToken, $tokenExpiration)
@@ -161,6 +169,12 @@ class spotifyControl extends eqLogic
     $pauseCmd = $this->getCmd(null, 'pause');
     $replace['#pause_id#'] = is_object($pauseCmd) ? $pauseCmd->getId() : '';
 
+    $changeDeviceCmd = $this->getCmd(null, 'changeDevice');
+    $replace['#changeDevice_id#'] = is_object($changeDeviceCmd) ? $changeDeviceCmd->getId() : '';
+
+    $setVolumeCmd = $this->getCmd(null, 'setVolume');
+    $replace['#setVolume_id#'] = is_object($setVolumeCmd) ? $setVolumeCmd->getId() : '';
+
     return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $jeedomVersion, 'main', 'spotifyControl')));
   }
 
@@ -190,6 +204,14 @@ class spotifyControlCmd extends cmd
         break;
       case 'pause':
         $this->getEqLogic()->pause();
+        break;
+      case 'changeDevice':
+        $deviceId = 1;
+        $this->getEqLogic()->changeDevice($deviceId);
+        break;
+      case 'setVolume':
+        $percent = 30;
+        $this->getEqLogic()->setVolume($percent);
         break;
     }
 
