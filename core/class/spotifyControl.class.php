@@ -238,6 +238,7 @@ class spotifyControlCmd extends cmd
   public function execute($options = [])
   {
     $cmd = $this->getLogicalId();
+    log::add('spotifyControl', 'debug', "$cmd with options: " . json_encode($options));
 
     switch ($cmd) {
       case 'play':
