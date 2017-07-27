@@ -14,13 +14,14 @@
         const data = {
             response_type: 'code',
             client_id: client_id,
-            scope: 'playlist-read-private playlist-read-collaborative user-read-playback-state user-modify-playback-state',
+            scope: 'user-modify-playback-state',
             redirect_uri: redirect_uri,
             state: state
         };
 
         const strWindowFeatures = "width=240,height=420,menubar=no,location=no,resizable=no,scrollbars=no,status=no";
         const spotifyLoginUrl = 'https://accounts.spotify.com/authorize?' + Object.keys(data).map(key => `${key}=${encodeURIComponent(data[key])}`).join('&');
+
         window.open(spotifyLoginUrl, 'Spotify', strWindowFeatures);
     });
 </script>

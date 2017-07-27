@@ -177,7 +177,9 @@ class spotifyControl extends eqLogic
   public function saveTokens($accessToken, $refreshToken, $tokenExpiration)
   {
     $this->setConfiguration('accessToken', $accessToken);
-    $this->setConfiguration('refreshToken', $refreshToken);
+    if ($refreshToken !== null && $refreshToken !== '') {
+      $this->setConfiguration('refreshToken', $refreshToken);
+    }
     $this->setConfiguration('tokenExpiration', $tokenExpiration);
 
     $this->save();
@@ -234,19 +236,15 @@ class spotifyControlCmd extends cmd
 
     switch ($cmd) {
       case 'play':
-        $this->getEqLogic()->play();
-        break;
+        return $this->getEqLogic()->play();
       case 'pause':
-        $this->getEqLogic()->pause();
-        break;
+        return $this->getEqLogic()->pause();
       case 'changeDevice':
         $deviceId = $options['device_id'];
-        $this->getEqLogic()->changeDevice($deviceId);
-        break;
+        return $this->getEqLogic()->changeDevice($deviceId) ? 'Device changed' : 'error';
       case 'setVolume':
         $percent = 30;
-        $this->getEqLogic()->setVolume($percent);
-        break;
+        return $this->getEqLogic()->setVolume($percent) ? 'Volume changed' : 'failed';
       case 'reset':
         $this->getEqLogic()->reset();
         break;
