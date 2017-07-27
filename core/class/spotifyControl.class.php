@@ -101,7 +101,9 @@ class spotifyControl extends eqLogic
   public function setVolume($percent)
   {
     log::add('spotifyControl', 'debug', "Change volume to $percent");
-    return $this->getSpotifyApi()->changeVolume($percent);
+    return $this->getSpotifyApi()->changeVolume([
+      'volume_percent' => $percent
+    ]);
   }
 
   /**
@@ -262,7 +264,7 @@ class spotifyControlCmd extends cmd
         $deviceId = $options['device_id'];
         return $this->getEqLogic()->changeDevice($deviceId) ? 'Device changed' : 'error';
       case 'setVolume':
-        $percent = 30;
+        $percent = $options['slider'];
         return $this->getEqLogic()->setVolume($percent) ? 'Volume changed' : 'failed';
       case 'reset':
         $this->getEqLogic()->reset();
