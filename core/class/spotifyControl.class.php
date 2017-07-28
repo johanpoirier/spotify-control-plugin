@@ -22,6 +22,15 @@ require_once __DIR__ . '/../../vendor/autoload.php';
 
 class spotifyControl extends eqLogic
 {
+  const EQ_LOGICAL_ID = 'spotifyControl';
+
+  const RESET_CMD_ID = 'reset';
+  const PLAY_CMD_ID = 'play';
+  const PAUSE_CMD_ID = 'pause';
+  const VOLUME_CMD_ID = 'volume';
+  const SET_VOLUME_CMD_ID = 'setVolume';
+  const CHANGE_DEVICE_CMD_ID = 'changeDevice';
+
   private static function generateRandomString($length = 10)
   {
     $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -61,7 +70,7 @@ class spotifyControl extends eqLogic
    */
   public function play()
   {
-    log::add('spotifyControl', 'debug', 'Play');
+    log::add(self::EQ_LOGICAL_ID, 'debug', 'Play');
     return $this->getSpotifyApi()->play();
   }
 
@@ -72,7 +81,7 @@ class spotifyControl extends eqLogic
    */
   public function pause()
   {
-    log::add('spotifyControl', 'debug', 'Pause');
+    log::add(self::EQ_LOGICAL_ID, 'debug', 'Pause');
     return $this->getSpotifyApi()->pause();
   }
 
@@ -85,9 +94,9 @@ class spotifyControl extends eqLogic
   public function changeDevice($deviceId)
   {
     $this->pause();
-    log::add('spotifyControl', 'debug', "Change device with id $deviceId");
+    log::add(self::EQ_LOGICAL_ID, 'debug', "Change device with id $deviceId");
     return $this->getSpotifyApi()->changeMyDevice([
-      'device_ids' => [ $deviceId ],
+      'device_ids' => [$deviceId],
       'play' => true
     ]);
   }
@@ -100,7 +109,7 @@ class spotifyControl extends eqLogic
    */
   public function setVolume($percent)
   {
-    log::add('spotifyControl', 'debug', "Change volume to $percent");
+    log::add(self::EQ_LOGICAL_ID, 'debug', "Change volume to $percent");
     return $this->getSpotifyApi()->changeVolume([
       'volume_percent' => $percent
     ]);
@@ -111,7 +120,7 @@ class spotifyControl extends eqLogic
    */
   public function reset()
   {
-    log::add('spotifyControl', 'debug', 'Reset');
+    log::add(self::EQ_LOGICAL_ID, 'debug', 'Reset');
     $this->saveTokens(null, null, null);
   }
 
@@ -120,12 +129,12 @@ class spotifyControl extends eqLogic
    */
   public function postUpdate()
   {
-    $play = $this->getCmd(null, 'play');
+    $play = $this->getCmd(null, self::PLAY_CMD_ID);
     if (!is_object($play)) {
       $play = new spotifyControlCmd();
     }
     $play->setName('Play');
-    $play->setLogicalId('play');
+    $play->setLogicalId(self::PLAY_CMD_ID);
     $play->setEqLogic_id($this->getId());
     $play->setType('action');
     $play->setSubType('other');
@@ -133,12 +142,12 @@ class spotifyControl extends eqLogic
     $play->setDisplay('generic_type', 'SPOTIFY_PLAY');
     $play->save();
 
-    $pause = $this->getCmd(null, 'pause');
+    $pause = $this->getCmd(null, self::PAUSE_CMD_ID);
     if (!is_object($pause)) {
       $pause = new spotifyControlCmd();
     }
     $pause->setName('Pause');
-    $pause->setLogicalId('pause');
+    $pause->setLogicalId(self::PAUSE_CMD_ID);
     $pause->setEqLogic_id($this->getId());
     $pause->setType('action');
     $pause->setSubType('other');
@@ -146,27 +155,27 @@ class spotifyControl extends eqLogic
     $pause->setDisplay('generic_type', 'SPOTIFY_PAUSE');
     $pause->save();
 
-    $changeDevice = $this->getCmd(null, 'changeDevice');
+    $changeDevice = $this->getCmd(null, self::CHANGE_DEVICE_CMD_ID);
     if (!is_object($changeDevice)) {
       $changeDevice = new spotifyControlCmd();
     }
     $changeDevice->setName('Change device');
     $changeDevice->setEqLogic_id($this->getId());
-    $changeDevice->setLogicalId('changeDevice');
+    $changeDevice->setLogicalId(self::CHANGE_DEVICE_CMD_ID);
     $changeDevice->setType('action');
     $changeDevice->setSubType('slider');
     $changeDevice->setIsVisible(1);
     $changeDevice->setDisplay('generic_type', 'SPOTIFY_CHANGE_DEVICE');
     $changeDevice->save();
 
-    $volume = $this->getCmd(null, 'volume');
+    $volume = $this->getCmd(null, self::VOLUME_CMD_ID);
     if (!is_object($volume)) {
       $volume = new spotifyControlCmd();
     }
     $volume->setName('Volume');
     $volume->setUnite('%');
     $volume->setEqLogic_id($this->getId());
-    $volume->setLogicalId('volume');
+    $volume->setLogicalId(self::VOLUME_CMD_ID);
     $volume->setType('info');
     $volume->setSubType('numeric');
     $volume->setConfiguration('repeatEventManagement', 'never');
@@ -174,12 +183,12 @@ class spotifyControl extends eqLogic
     $volume->setDisplay('generic_type', 'SPOTIFY_VOLUME');
     $volume->save();
 
-    $setVolume = $this->getCmd(null, 'setVolume');
+    $setVolume = $this->getCmd(null, self::SET_VOLUME_CMD_ID);
     if (!is_object($setVolume)) {
       $setVolume = new spotifyControlCmd();
     }
     $setVolume->setName('Set volume');
-    $setVolume->setLogicalId('setVolume');
+    $setVolume->setLogicalId(self::SET_VOLUME_CMD_ID);
     $setVolume->setEqLogic_id($this->getId());
     $setVolume->setType('action');
     $setVolume->setSubType('slider');
@@ -187,12 +196,12 @@ class spotifyControl extends eqLogic
     $setVolume->setDisplay('generic_type', 'SPOTIFY_SET_VOLUME');
     $setVolume->save();
 
-    $reset = $this->getCmd(null, 'reset');
+    $reset = $this->getCmd(null, self::RESET_CMD_ID);
     if (!is_object($reset)) {
       $reset = new spotifyControlCmd();
     }
     $reset->setName('Reset');
-    $reset->setLogicalId('reset');
+    $reset->setLogicalId(self::RESET_CMD_ID);
     $reset->setEqLogic_id($this->getId());
     $reset->setType('action');
     $reset->setSubType('other');
@@ -212,39 +221,39 @@ class spotifyControl extends eqLogic
     $this->save();
   }
 
-  public function toHtml($target = 'dashboard')
+  public function toHtml($_version = 'dashboard')
   {
-      $replace = $this->preToHtml($target);
+    $replace = $this->preToHtml($_version);
     if (!is_array($replace)) {
       return $replace;
     }
-    $jeedomVersion = jeedom::versionAlias($target);
+    $version = jeedom::versionAlias($_version);
 
     $refreshToken = $this->getConfiguration('refreshToken', null);
     if ($refreshToken === null || $refreshToken === '') {
-      return $this->loginHtml($target);
+      return $this->postToHtml($_version, $this->getLoginHtml($version));
     }
 
     // User's devices
     $replace['#devices#'] = json_encode($this->getSpotifyApi()->getMyDevices());
 
     // Commands
-    $playCmd = $this->getCmd(null, 'play');
+    $playCmd = $this->getCmd(null, self::PLAY_CMD_ID);
     $replace['#play_id#'] = is_object($playCmd) ? $playCmd->getId() : '';
 
-    $pauseCmd = $this->getCmd(null, 'pause');
+    $pauseCmd = $this->getCmd(null, self::PAUSE_CMD_ID);
     $replace['#pause_id#'] = is_object($pauseCmd) ? $pauseCmd->getId() : '';
 
-    $changeDeviceCmd = $this->getCmd(null, 'changeDevice');
+    $changeDeviceCmd = $this->getCmd(null, self::CHANGE_DEVICE_CMD_ID);
     $replace['#changeDevice_id#'] = is_object($changeDeviceCmd) ? $changeDeviceCmd->getId() : '';
 
-    $setVolumeCmd = $this->getCmd(null, 'setVolume');
+    $setVolumeCmd = $this->getCmd(null, self::SET_VOLUME_CMD_ID);
     $replace['#setVolume_id#'] = is_object($setVolumeCmd) ? $setVolumeCmd->getId() : '';
 
-    return $this->postToHtml($target, template_replace($replace, self::$_templateArray[$target]));
+    return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $version, 'main', self::EQ_LOGICAL_ID)));
   }
 
-  private function loginHtml($target)
+  private function getLoginHtml($version)
   {
     $state = self::generateRandomString();
     $this->setConfiguration('state', $state);
@@ -254,7 +263,7 @@ class spotifyControl extends eqLogic
     $replace['#redirecturi#'] = $this->getConfiguration('redirectUri', '');
     $replace['#state#'] = $state;
 
-    return $this->postToHtml($target, template_replace($replace, self::$_templateArray[$target]));
+    return template_replace($replace, getTemplate('core', $version, 'login', self::EQ_LOGICAL_ID));
   }
 }
 
@@ -263,20 +272,20 @@ class spotifyControlCmd extends cmd
   public function execute($options = [])
   {
     $cmd = $this->getLogicalId();
-    log::add('spotifyControl', 'debug', "$cmd with options: " . json_encode($options));
+    log::add(spotifyControl::EQ_LOGICAL_ID, 'debug', "$cmd with options: " . json_encode($options));
 
     switch ($cmd) {
-      case 'play':
+      case spotifyControl::PLAY_CMD_ID:
         return $this->getEqLogic()->play();
-      case 'pause':
+      case spotifyControl::PAUSE_CMD_ID:
         return $this->getEqLogic()->pause();
-      case 'changeDevice':
+      case spotifyControl::CHANGE_DEVICE_CMD_ID:
         $deviceId = $options['slider'];
         return $this->getEqLogic()->changeDevice($deviceId) ? 'Device changed' : 'error';
-      case 'setVolume':
+      case spotifyControl::SET_VOLUME_CMD_ID:
         $percent = $options['slider'];
         return $this->getEqLogic()->setVolume($percent) ? 'Volume changed' : 'failed';
-      case 'reset':
+      case spotifyControl::RESET_CMD_ID:
         $this->getEqLogic()->reset();
         break;
     }
