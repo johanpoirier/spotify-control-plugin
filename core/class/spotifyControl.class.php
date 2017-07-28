@@ -223,6 +223,9 @@ class spotifyControl extends eqLogic
 
   public function toHtml($_version = 'dashboard')
   {
+    // To remove when dev is over
+    cache::flush();
+
     $variables = $this->preToHtml($_version);
     if (!is_array($variables)) {
       return $variables;
@@ -246,16 +249,16 @@ class spotifyControl extends eqLogic
 
     // Commands
     $playCmd = $this->getCmd(null, self::PLAY_CMD_ID);
-    $variables['#play_id#'] = is_object($playCmd) ? $playCmd->getId() : '';
+    $variables['#' . self::PLAY_CMD_ID . '_id#'] = is_object($playCmd) ? $playCmd->getId() : '';
 
     $pauseCmd = $this->getCmd(null, self::PAUSE_CMD_ID);
-    $variables['#pause_id#'] = is_object($pauseCmd) ? $pauseCmd->getId() : '';
+    $variables['#' . self::PAUSE_CMD_ID . '_id#'] = is_object($pauseCmd) ? $pauseCmd->getId() : '';
 
     $changeDeviceCmd = $this->getCmd(null, self::CHANGE_DEVICE_CMD_ID);
-    $replace['#changeDevice_id#'] = is_object($changeDeviceCmd) ? $changeDeviceCmd->getId() : '';
+    $variables['#' . self::CHANGE_DEVICE_CMD_ID . '_id#'] = is_object($changeDeviceCmd) ? $changeDeviceCmd->getId() : '';
 
     $setVolumeCmd = $this->getCmd(null, self::SET_VOLUME_CMD_ID);
-    $variables['#setVolume_id#'] = is_object($setVolumeCmd) ? $setVolumeCmd->getId() : '';
+    $variables['#' . self::SET_VOLUME_CMD_ID . '_id#'] = is_object($setVolumeCmd) ? $setVolumeCmd->getId() : '';
 
     return template_replace($variables, getTemplate('core', $version, 'main', self::EQ_LOGICAL_ID));
   }
