@@ -1,16 +1,26 @@
 <style>
-    .spotify-control {
-        padding: 2rem;
+    .spotify-control-content {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 1rem 2rem;
     }
     .spotify-devices {
         display: flex;
-        justify-content: space-around;
+        justify-content: flex-start;
+    }
+    .btn-spotify-device {
+        margin: 0 1rem;
     }
 </style>
-<div class="eqLogic-widget eqLogic spotify-control" style="width: 350px;" data-eqLogic_id="#id#" data-eqLogic_uid="#uid#" data-version="#version#">
-    <button class="btn btn-default btn-spotify-play" data-cmd_id="#play_id#">Play</button>
-    <button class="btn btn-default btn-spotify-pause" data-cmd_id="#pause_id#">Pause</button>
-    <div class="spotify-devices"></div>
+<div class="eqLogic-widget eqLogic spotify-control" data-eqLogic_id="#id#" data-eqLogic_uid="#uid#" data-version="#version#">
+    <div class="spotify-control-content">
+        <div class="spotify-control-actions">
+            <button class="btn btn-spotify-play" data-cmd_id="#play_id#">Play</button>
+            <button class="btn btn-spotify-pause" data-cmd_id="#pause_id#">Pause</button>
+        </div>
+        <div class="spotify-devices"></div>
+    </div>
 </div>
 <script type="text/javascript">
     const devices = #devices#.devices;
@@ -18,6 +28,7 @@
         const deviceElement = document.createElement('button');
         deviceElement.innerHTML = device.name;
         deviceElement.classList.add('btn');
+        deviceElement.classList.add('btn-spotify-device');
         if (device.is_active === true) {
             deviceElement.classList.add('btn-primary');
         }
