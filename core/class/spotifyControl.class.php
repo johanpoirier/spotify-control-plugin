@@ -94,11 +94,15 @@ class spotifyControl extends eqLogic
   public function changeDevice($deviceId)
   {
     $this->pause();
+
     log::add(self::EQ_LOGICAL_ID, 'debug', "Change device with id $deviceId");
-    return $this->getSpotifyApi()->changeMyDevice([
+    $result = $this->getSpotifyApi()->changeMyDevice([
       'device_ids' => [$deviceId],
       'play' => true
     ]);
+    $this->refreshWidget();
+
+    return $result;
   }
 
   /**
