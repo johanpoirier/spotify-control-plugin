@@ -37,7 +37,7 @@ class spotifyControl extends eqLogic
     $charactersLength = strlen($characters);
     $randomString = '';
     for ($i = 0; $i < $length; $i++) {
-      $randomString .= $characters[rand(0, $charactersLength - 1)];
+      $randomString .= $characters[mt_rand(0, $charactersLength - 1)];
     }
     return $randomString;
   }
@@ -223,47 +223,54 @@ class spotifyControl extends eqLogic
 
   public function toHtml($_version = 'dashboard')
   {
-    $replace = $this->preToHtml($_version);
-    if (!is_array($replace)) {
-      return $replace;
+    $variables = $this->preToHtml($_version);
+    if (!is_array($variables)) {
+      return $variables;
     }
     $version = jeedom::versionAlias($_version);
 
     $refreshToken = $this->getConfiguration('refreshToken', null);
     if ($refreshToken === null || $refreshToken === '') {
-      return $this->postToHtml($_version, $this->getLoginHtml($version));
+      $html = $this->getLoginHtml($version, $variables);
+    } else {
+      $html = $this->getMainHtml($version, $variables);
     }
 
+    return $this->postToHtml($_version, $html);
+  }
+
+  private function getMainHtml($version, $variables)
+  {
     // User's devices
-    $replace['#devices#'] = json_encode($this->getSpotifyApi()->getMyDevices());
+    $variables['#devices#'] = json_encode($this->getSpotifyApi()->getMyDevices());
 
     // Commands
     $playCmd = $this->getCmd(null, self::PLAY_CMD_ID);
-    $replace['#play_id#'] = is_object($playCmd) ? $playCmd->getId() : '';
+    $variables['#play_id#'] = is_object($playCmd) ? $playCmd->getId() : '';
 
     $pauseCmd = $this->getCmd(null, self::PAUSE_CMD_ID);
-    $replace['#pause_id#'] = is_object($pauseCmd) ? $pauseCmd->getId() : '';
+    $variables['#pause_id#'] = is_object($pauseCmd) ? $pauseCmd->getId() : '';
 
     $changeDeviceCmd = $this->getCmd(null, self::CHANGE_DEVICE_CMD_ID);
     $replace['#changeDevice_id#'] = is_object($changeDeviceCmd) ? $changeDeviceCmd->getId() : '';
 
     $setVolumeCmd = $this->getCmd(null, self::SET_VOLUME_CMD_ID);
-    $replace['#setVolume_id#'] = is_object($setVolumeCmd) ? $setVolumeCmd->getId() : '';
+    $variables['#setVolume_id#'] = is_object($setVolumeCmd) ? $setVolumeCmd->getId() : '';
 
-    return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $version, 'main', self::EQ_LOGICAL_ID)));
+    return template_replace($variables, getTemplate('core', $version, 'main', self::EQ_LOGICAL_ID));
   }
 
-  private function getLoginHtml($version)
+  private function getLoginHtml($version, $variables)
   {
     $state = self::generateRandomString();
     $this->setConfiguration('state', $state);
     $this->save();
 
-    $replace['#clientid#'] = $this->getConfiguration('clientId', '');
-    $replace['#redirecturi#'] = $this->getConfiguration('redirectUri', '');
-    $replace['#state#'] = $state;
+    $variables['#clientid#'] = $this->getConfiguration('clientId', '');
+    $variables['#redirecturi#'] = $this->getConfiguration('redirectUri', '');
+    $variables['#state#'] = $state;
 
-    return template_replace($replace, getTemplate('core', $version, 'login', self::EQ_LOGICAL_ID));
+    return template_replace($variables, getTemplate('core', $version, 'login', self::EQ_LOGICAL_ID));
   }
 }
 
