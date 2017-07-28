@@ -1,4 +1,9 @@
 <style>
+    .eqLogic.spotify-control {
+        background-color: #19bc9c;
+        max-height: 200px;
+    }
+
     .spotify-control-content {
         display: flex;
         flex-direction: column;
@@ -20,8 +25,16 @@
         display: flex;
         justify-content: center;
     }
-    .btn-spotify-device {
+
+    .spotify-control .btn {
+        text-shadow: none;
+    }
+    .spotify-control .btn.btn-spotify-device {
         margin: 0 1rem;
+    }
+    .spotify-control .btn.btn-spotify-device-active {
+        background-color: white;
+        color: #333232 !important;
     }
 </style>
 <div class="eqLogic-widget eqLogic spotify-control" data-eqLogic_id="#id#" data-eqLogic_uid="#uid#" data-version="#version#">
@@ -47,7 +60,7 @@
         deviceElement.classList.add('btn');
         deviceElement.classList.add('btn-spotify-device');
         if (device.is_active === true) {
-            deviceElement.classList.add('btn-primary');
+            deviceElement.classList.add('btn-spotify-device-active');
         }
         deviceElement.setAttribute('data-cmd_id', #changeDevice_id#);
         deviceElement.setAttribute('data-device_id', device.id);
