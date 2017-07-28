@@ -212,14 +212,17 @@ class spotifyControl extends eqLogic
     $this->save();
   }
 
-  public function toHtml($_version = 'dashboard')
+  public function toHtml($target = 'dashboard')
   {
-    $replace = [];
-    $jeedomVersion = jeedom::versionAlias($_version);
+      $replace = $this->preToHtml($target);
+    if (!is_array($replace)) {
+      return $replace;
+    }
+    $jeedomVersion = jeedom::versionAlias($target);
 
     $refreshToken = $this->getConfiguration('refreshToken', null);
     if ($refreshToken === null || $refreshToken === '') {
-      return $this->loginHtml($_version, $jeedomVersion);
+      return $this->loginHtml($target);
     }
 
     // User's devices
@@ -238,10 +241,10 @@ class spotifyControl extends eqLogic
     $setVolumeCmd = $this->getCmd(null, 'setVolume');
     $replace['#setVolume_id#'] = is_object($setVolumeCmd) ? $setVolumeCmd->getId() : '';
 
-    return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $jeedomVersion, 'main', 'spotifyControl')));
+    return $this->postToHtml($target, template_replace($replace, self::$_templateArray[$target]));
   }
 
-  private function loginHtml($_version, $jeedomVersion)
+  private function loginHtml($target)
   {
     $state = self::generateRandomString();
     $this->setConfiguration('state', $state);
@@ -251,7 +254,7 @@ class spotifyControl extends eqLogic
     $replace['#redirecturi#'] = $this->getConfiguration('redirectUri', '');
     $replace['#state#'] = $state;
 
-    return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $jeedomVersion, 'login', 'spotifyControl')));
+    return $this->postToHtml($target, template_replace($replace, self::$_templateArray[$target]));
   }
 }
 

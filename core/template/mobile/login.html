@@ -1,0 +1,27 @@
+<div class="eqLogic-widget eqLogic" style="display: flex; flex-direction: column; align-items: center; justify-content: center; max-width: 300px;">
+    <span>Spotify</span>
+    <button class="btn btn-default action" id="spotifyControl-login-btn">Login</button>
+</div>
+<script type="text/javascript">
+    const client_id = '#clientid#';
+    const redirect_uri = '#redirecturi#';
+    const state = '#state#';
+
+    $('#spotifyControl-login-btn').click(function() {
+        console.log('Login to Spotify');
+
+        // your application requests authorization
+        const data = {
+            response_type: 'code',
+            client_id: client_id,
+            scope: 'user-modify-playback-state',
+            redirect_uri: redirect_uri,
+            state: state
+        };
+
+        const strWindowFeatures = "width=240,height=420,menubar=no,location=no,resizable=no,scrollbars=no,status=no";
+        const spotifyLoginUrl = 'https://accounts.spotify.com/authorize?' + Object.keys(data).map(key => `${key}=${encodeURIComponent(data[key])}`).join('&');
+
+        window.open(spotifyLoginUrl, 'Spotify', strWindowFeatures);
+    });
+</script>

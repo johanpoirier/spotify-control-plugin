@@ -1,0 +1,40 @@
+<style>
+    .spotify-control {
+        padding: 2rem;
+    }
+    .spotify-devices {
+        display: flex;
+        justify-content: space-around;
+    }
+</style>
+<div class="eqLogic-widget eqLogic spotify-control" style="width: 350px;" data-eqLogic_id="#id#" data-eqLogic_uid="#uid#" data-version="#version#">
+    <button class="btn btn-default btn-spotify-play" data-cmd_id="#play_id#">Play</button>
+    <button class="btn btn-default btn-spotify-pause" data-cmd_id="#pause_id#">Pause</button>
+    <div class="spotify-devices"></div>
+</div>
+<script type="text/javascript">
+    const devices = #devices#.devices;
+    devices.forEach(device => {
+        const deviceElement = document.createElement('button');
+        deviceElement.innerHTML = device.name;
+        deviceElement.classList.add('btn');
+        if (device.is_active === true) {
+            deviceElement.classList.add('btn-primary');
+        }
+        deviceElement.setAttribute('data-cmd_id', #changeDevice_id#);
+        deviceElement.setAttribute('data-device_id', device.id);
+        document.querySelector('.spotify-devices').appendChild(deviceElement);
+    });
+
+    $('.btn').click(function() {
+        const btn = $(this);
+        const cmd = btn.data('cmd_id');
+        if (cmd) {
+            const options = { id: cmd, value: {} };
+            if (btn[0].hasAttribute('data-device_id')) {
+                options.value.slider = btn.data('device_id');
+            }
+            jeedom.cmd.execute(options);
+        }
+    });
+</script>
