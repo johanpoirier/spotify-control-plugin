@@ -14,6 +14,10 @@
     }
     .spotify-devices {
         display: flex;
+        flex-direction: column;
+    }
+    .spotify-device-list {
+        display: flex;
         justify-content: center;
     }
     .btn-spotify-device {
@@ -29,7 +33,10 @@
             <button class="btn btn-spotify-play" data-cmd_id="#play_id#">Play</button>
             <button class="btn btn-spotify-pause" data-cmd_id="#pause_id#">Pause</button>
         </div>
-        <div class="spotify-devices"></div>
+        <div class="spotify-devices">
+            <span class="spotify-devices-title">Appareils :</span>
+            <div class="spotify-device-list"></div>
+        </div>
     </div>
 </div>
 <script type="text/javascript">
@@ -44,7 +51,7 @@
         }
         deviceElement.setAttribute('data-cmd_id', #changeDevice_id#);
         deviceElement.setAttribute('data-device_id', device.id);
-        document.querySelector('.spotify-devices').appendChild(deviceElement);
+        document.querySelector('.spotify-device-list').appendChild(deviceElement);
     });
 
     $('.btn').click(function() {
