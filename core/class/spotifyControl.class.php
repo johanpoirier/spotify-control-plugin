@@ -27,6 +27,7 @@ class spotifyControl extends eqLogic
   const RESET_CMD_ID = 'reset';
   const PLAY_CMD_ID = 'play';
   const PAUSE_CMD_ID = 'pause';
+  const NEXT_CMD_ID = 'next';
   const VOLUME_CMD_ID = 'volume';
   const SET_VOLUME_CMD_ID = 'setVolume';
   const CHANGE_DEVICE_CMD_ID = 'changeDevice';
@@ -84,6 +85,17 @@ class spotifyControl extends eqLogic
   {
     log::add(self::EQ_LOGICAL_ID, 'debug', 'Pause');
     return $this->getSpotifyApi()->pause();
+  }
+
+  /**
+   * Play the next track in the current users's queue
+   *
+   * @return boolean
+   */
+  public function next()
+  {
+    log::add(self::EQ_LOGICAL_ID, 'debug', 'Next');
+    return $this->getSpotifyApi()->next();
   }
 
   /**
@@ -174,6 +186,19 @@ class spotifyControl extends eqLogic
     $pause->setDisplay('generic_type', 'SPOTIFY_PAUSE');
     $pause->save();
 
+    $next = $this->getCmd(null, self::NEXT_CMD_ID);
+    if (!is_object($next)) {
+      $next = new spotifyControlCmd();
+    }
+    $next->setName('Next');
+    $next->setLogicalId(self::NEXT_CMD_ID);
+    $next->setEqLogic_id($this->getId());
+    $next->setType('action');
+    $next->setSubType('other');
+    $next->setIsVisible(1);
+    $next->setDisplay('generic_type', 'SPOTIFY_NEXT');
+    $next->save();
+
     $changeDevice = $this->getCmd(null, self::CHANGE_DEVICE_CMD_ID);
     if (!is_object($changeDevice)) {
       $changeDevice = new spotifyControlCmd();
@@ -256,7 +281,7 @@ class spotifyControl extends eqLogic
   public function toHtml($_version = 'dashboard')
   {
     // To remove when dev is over
-    cache::flush();
+    //cache::flush();
 
     $variables = $this->preToHtml($_version);
     if (!is_array($variables)) {
@@ -285,6 +310,9 @@ class spotifyControl extends eqLogic
 
     $pauseCmd = $this->getCmd(null, self::PAUSE_CMD_ID);
     $variables['#' . self::PAUSE_CMD_ID . '_id#'] = is_object($pauseCmd) ? $pauseCmd->getId() : '';
+
+    $nextCmd = $this->getCmd(null, self::NEXT_CMD_ID);
+    $variables['#' . self::NEXT_CMD_ID . '_id#'] = is_object($nextCmd) ? $nextCmd->getId() : '';
 
     $changeDeviceAndPlayCmd = $this->getCmd(null, self::CHANGE_DEVICE_AND_PLAY_CMD_ID);
     $variables['#' . self::CHANGE_DEVICE_AND_PLAY_CMD_ID . '_id#'] = is_object($changeDeviceAndPlayCmd) ? $changeDeviceAndPlayCmd->getId() : '';
@@ -321,6 +349,8 @@ class spotifyControlCmd extends cmd
         return $this->getEqLogic()->play();
       case spotifyControl::PAUSE_CMD_ID:
         return $this->getEqLogic()->pause();
+      case spotifyControl::NEXT_CMD_ID:
+        return $this->getEqLogic()->next();
       case spotifyControl::CHANGE_DEVICE_AND_PLAY_CMD_ID:
         $deviceId = $options['slider'];
         return $this->getEqLogic()->changeDeviceAndPlay($deviceId) ? 'Device changed' : 'error';

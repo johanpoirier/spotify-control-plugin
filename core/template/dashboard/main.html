@@ -17,6 +17,15 @@
         text-align: center;
         width: 100%;
     }
+
+    .spotify-control-actions {
+        display: flex;
+        justify-content: center;
+    }
+    .spotify-control-actions .btn {
+        margin: 0 0.2rem;
+    }
+
     .spotify-devices {
         display: flex;
         flex-direction: column;
@@ -43,8 +52,9 @@
             <a href="#eqLink#">#name#</a>
         </span>
         <div class="spotify-control-actions">
-            <button class="btn btn-spotify-play" data-cmd_id="#play_id#">Play</button>
-            <button class="btn btn-spotify-pause" data-cmd_id="#pause_id#">Pause</button>
+            <button class="btn btn-spotify-play" data-cmd_id="#play_id#"><i class="fa fa-play" aria-hidden="true"></i></button>
+            <button class="btn btn-spotify-pause" data-cmd_id="#pause_id#"><i class="fa fa-pause" aria-hidden="true"></i></button>
+            <button class="btn btn-spotify-next" data-cmd_id="#next_id#"><i class="fa fa-step-forward" aria-hidden="true"></i></button>
         </div>
         <div class="spotify-devices">
             <span class="spotify-devices-title">Appareils :</span>
