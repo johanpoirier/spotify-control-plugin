@@ -1,25 +1,55 @@
 <style>
+    .eqLogic.spotify-control {
+        background-color: #19bc9c;
+        max-height: 200px;
+    }
+
     .spotify-control-content {
         display: flex;
         flex-direction: column;
+        height: 100%;
         justify-content: space-between;
-        padding: 1rem 2rem;
+        padding: 0 2rem 1rem 2rem;
+    }
+    .spotify-control-title {
+        font-size: 1.5em;
+        margin: 0 0 2rem;
+        text-align: center;
+        width: 100%;
     }
     .spotify-devices {
         display: flex;
-        justify-content: flex-start;
+        flex-direction: column;
     }
-    .btn-spotify-device {
+    .spotify-device-list {
+        display: flex;
+        justify-content: center;
+    }
+
+    .spotify-control .btn {
+        text-shadow: none;
+    }
+    .spotify-control .btn.btn-spotify-device {
         margin: 0 1rem;
+    }
+    .spotify-control .btn.btn-spotify-device-active {
+        background-color: white;
+        color: #333232 !important;
     }
 </style>
 <div class="eqLogic-widget eqLogic spotify-control" data-eqLogic_id="#id#" data-eqLogic_uid="#uid#" data-version="#version#">
     <div class="spotify-control-content">
+        <span class="widget-name spotify-control-title">
+            <a href="#eqLink#">#name#</a>
+        </span>
         <div class="spotify-control-actions">
             <button class="btn btn-spotify-play" data-cmd_id="#play_id#">Play</button>
             <button class="btn btn-spotify-pause" data-cmd_id="#pause_id#">Pause</button>
         </div>
-        <div class="spotify-devices"></div>
+        <div class="spotify-devices">
+            <span class="spotify-devices-title">Appareils :</span>
+            <div class="spotify-device-list"></div>
+        </div>
     </div>
 </div>
 <script type="text/javascript">
@@ -30,11 +60,11 @@
         deviceElement.classList.add('btn');
         deviceElement.classList.add('btn-spotify-device');
         if (device.is_active === true) {
-            deviceElement.classList.add('btn-primary');
+            deviceElement.classList.add('btn-spotify-device-active');
         }
-        deviceElement.setAttribute('data-cmd_id', #changeDevice_id#);
+        deviceElement.setAttribute('data-cmd_id', #changeDeviceAndPlay_id#);
         deviceElement.setAttribute('data-device_id', device.id);
-        document.querySelector('.spotify-devices').appendChild(deviceElement);
+        document.querySelector('.spotify-device-list').appendChild(deviceElement);
     });
 
     $('.btn').click(function() {
