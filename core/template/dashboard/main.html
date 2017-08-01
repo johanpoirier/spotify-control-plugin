@@ -5,6 +5,8 @@
         <span class="widget-name spotify-control-title">
             <a href="#eqLink#">#name#</a>
         </span>
+        <div class="spotify-control-track">
+        </div>
         <div class="spotify-control-actions">
             <button class="btn btn-spotify-play" data-cmd_id="#play_id#"><i class="fa fa-play" aria-hidden="true"></i></button>
             <button class="btn btn-spotify-pause" data-cmd_id="#pause_id#"><i class="fa fa-pause" aria-hidden="true"></i></button>
@@ -20,6 +22,8 @@
         if (!window.spotifyControl) {
             window.spotifyControl = {};
         }
+
+        // user's devices
         window.spotifyControl.devices = #devices#.devices;
         window.spotifyControl.devices.forEach(device => {
             const deviceElement = document.createElement('button');
@@ -34,6 +38,14 @@
             document.querySelector('.spotify-device-list').appendChild(deviceElement);
         });
 
+        // current track
+        window.spotifyControl.currentTrack = #currentTrack#;
+        trackElement = document.createElement('img');
+        trackElement.setAttribute('src', window.spotifyControl.currentTrack.item.album.images[0].url);
+        document.querySelector('.spotify-control-track').innerHTML = '';
+        document.querySelector('.spotify-control-track').appendChild(trackElement);
+
+        // cmd handlers
         $('.btn').click(function() {
             const btn = $(this);
             const cmd = btn.data('cmd_id');

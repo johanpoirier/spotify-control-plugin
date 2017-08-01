@@ -301,6 +301,9 @@ class spotifyControl extends eqLogic
     // User's devices
     $variables['#devices#'] = json_encode($this->getSpotifyApi()->getMyDevices());
 
+    // User current track
+    $variables['#currentTrack#'] = json_encode($this->getSpotifyApi()->getMyCurrentTrack());
+
     // Commands
     $playCmd = $this->getCmd(null, self::PLAY_CMD_ID);
     $variables['#' . self::PLAY_CMD_ID . '_id#'] = is_object($playCmd) ? $playCmd->getId() : '';
