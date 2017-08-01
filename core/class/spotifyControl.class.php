@@ -278,9 +278,6 @@ class spotifyControl extends eqLogic
 
   public function toHtml($_version = 'dashboard')
   {
-    // To remove when dev is over
-    cache::flush();
-
     $variables = $this->preToHtml($_version);
     if (!is_array($variables)) {
       return $variables;
@@ -291,6 +288,8 @@ class spotifyControl extends eqLogic
     if ($refreshToken === null || $refreshToken === '') {
       $html = $this->getLoginHtml($version, $variables);
     } else {
+      // To remove when dev is over
+      $this->emptyCacheWidget();
       $html = $this->getMainHtml($version, $variables);
     }
 
