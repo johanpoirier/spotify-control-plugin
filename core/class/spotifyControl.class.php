@@ -123,8 +123,6 @@ class spotifyControl extends eqLogic
    */
   public function changeDevice($deviceId)
   {
-    $this->pause();
-
     log::add(self::EQ_LOGICAL_ID, 'debug', "Change device with id $deviceId");
     return $this->getSpotifyApi()->changeMyDevice([
       'device_ids' => [$deviceId],
@@ -281,7 +279,7 @@ class spotifyControl extends eqLogic
   public function toHtml($_version = 'dashboard')
   {
     // To remove when dev is over
-    //cache::flush();
+    cache::flush();
 
     $variables = $this->preToHtml($_version);
     if (!is_array($variables)) {
@@ -347,16 +345,25 @@ class spotifyControlCmd extends cmd
     switch ($cmd) {
       case spotifyControl::PLAY_CMD_ID:
         return $this->getEqLogic()->play();
+
       case spotifyControl::PAUSE_CMD_ID:
         return $this->getEqLogic()->pause();
+
       case spotifyControl::NEXT_CMD_ID:
         return $this->getEqLogic()->next();
+
       case spotifyControl::CHANGE_DEVICE_AND_PLAY_CMD_ID:
         $deviceId = $options['slider'];
-        return $this->getEqLogic()->changeDeviceAndPlay($deviceId) ? 'Device changed' : 'error';
+        $cmdSuccess = $this->getEqLogic()->changeDeviceAndPlay($deviceId);
+        if ($cmdSuccess) {
+          $this->getEqLogic()->refreshWidget();
+        }
+        return $cmdSuccess ? 'Device changed' : 'error';
+
       case spotifyControl::SET_VOLUME_CMD_ID:
         $percent = $options['slider'];
         return $this->getEqLogic()->setVolume($percent) ? 'Volume changed' : 'failed';
+
       case spotifyControl::RESET_CMD_ID:
         $this->getEqLogic()->reset();
         break;
