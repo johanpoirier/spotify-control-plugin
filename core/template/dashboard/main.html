@@ -24,7 +24,8 @@
         }
 
         // user's devices
-        window.spotifyControl.devices = #devices#.devices;
+        window.spotifyControl.devices = #devices#;
+        window.spotifyControl.devices = window.spotifyControl.devices.devices || [];
         window.spotifyControl.devices.forEach(device => {
             const deviceElement = document.createElement('button');
             deviceElement.innerHTML = device.name;
@@ -40,11 +41,13 @@
 
         // current track
         window.spotifyControl.currentTrack = #currentTrack#;
-        trackElement = document.createElement('img');
-        trackElement.setAttribute('height', 140);
-        trackElement.setAttribute('src', window.spotifyControl.currentTrack.item.album.images[0].url);
-        document.querySelector('.spotify-control-track').innerHTML = '';
-        document.querySelector('.spotify-control-track').appendChild(trackElement);
+        if (window.spotifyControl.currentTrack.item) {
+            trackElement = document.createElement('img');
+            trackElement.setAttribute('height', 140);
+            trackElement.setAttribute('src', window.spotifyControl.currentTrack.item.album.images[0].url);
+            document.querySelector('.spotify-control-track').innerHTML = '';
+            document.querySelector('.spotify-control-track').appendChild(trackElement);
+        }
 
         // cmd handlers
         $('.btn').click(function() {
