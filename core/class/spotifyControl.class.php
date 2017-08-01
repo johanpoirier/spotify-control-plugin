@@ -352,7 +352,11 @@ class spotifyControlCmd extends cmd
         return $this->getEqLogic()->pause();
 
       case spotifyControl::NEXT_CMD_ID:
-        return $this->getEqLogic()->next();
+        $cmdSuccess = $this->getEqLogic()->next();
+        if ($cmdSuccess) {
+          $this->getEqLogic()->refreshWidget();
+        }
+        return $cmdSuccess ? 'Next track' : 'error';
 
       case spotifyControl::CHANGE_DEVICE_AND_PLAY_CMD_ID:
         $deviceId = $options['slider'];

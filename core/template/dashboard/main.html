@@ -1,4 +1,4 @@
-<div class="eqLogic-widget eqLogic" data-eqLogic_id="#id#" data-eqLogic_uid="#uid#" data-version="#version#">
+<div class="eqLogic-widget eqLogic" data-eqLogic_id="#id#" data-eqLogic_uid="#uid#" data-version="#version#" style="min-height: 300px;">
     <link rel="stylesheet" href="plugins/spotifyControl/core/template/css/style.css" />
 
     <div class="spotify-control">
@@ -41,6 +41,7 @@
         // current track
         window.spotifyControl.currentTrack = #currentTrack#;
         trackElement = document.createElement('img');
+        trackElement.setAttribute('height', 140);
         trackElement.setAttribute('src', window.spotifyControl.currentTrack.item.album.images[0].url);
         document.querySelector('.spotify-control-track').innerHTML = '';
         document.querySelector('.spotify-control-track').appendChild(trackElement);
